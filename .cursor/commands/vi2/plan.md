@@ -35,13 +35,13 @@ Once the investigation is complete, generate the files in `./.vi2/`.
 
 ## 1. `llm_context.md` (The "Knowledge Snapshot")
 Create this file FIRST. This file acts as the "Context Memory" for future implementation steps. It must contain all the "How-To" knowledge needed to execute the tasks without further research.
-**Structure:** - It should be Markdown document that friendly to LLM. Proposed structure:
-  * `# External Documentation`: Pasted related instructions/knowledges/snippets/examples from Web Links.
-  * `# User Decisions`: Special user requirements aor instructions.
+**Structure:** - It should be a Markdown document that is friendly to the LLM. Proposed structure:
+  * `# External Documentation`: Pasted related instructions, knowledge, snippets, and examples from Web Links.
+  * `# User Decisions`: Special user requirements or instructions.
   * `# Codebase Context`: Analysis of existing local files (e.g., "Current UserAuth class lacks method X").
   * `# Technical Decisions`: Hard constraints established during your analysis. Include rollback strategy points here.
   * `# Rollback Strategy`: Document critical milestones and rollback points identified during planning.
-  * `# Others`: Any other information that useful/needed to implement tasks (or at least one task).
+  * `# Others`: Any other information that is useful or needed to implement tasks (or at least one task).
 
 ## 2. `tasks.md` (Execution Checklist)
 Create the implementation plan.

@@ -29,7 +29,7 @@ Perform comprehensive validation of all artifacts to ensure they are ready for e
     * Code snippets are properly formatted
     * External documentation links are accessible (if applicable)
 * **Completeness:**
-    * Required sections exist: `# External Documentation`, `# User Decisions`, `# Codebase Context`, `# Technical Decisions`
+    * Required sections exist: `# External Documentation`, `# User Decisions`, `# Codebase Context`, `# Technical Decisions`, `# Rollback Strategy`
     * Technical decisions are clearly stated
     * Codebase context is up-to-date
 * **Consistency:**
