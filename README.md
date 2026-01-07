@@ -36,9 +36,9 @@ Simply copy the `.cursor/commands/vi2` directory into your project's `.cursor/co
 ### Sample of Usage
 
 1.  `/vi2/plan @<some_file_with_requirements.md>` (preferred approach) or `/vi2/plan <describe your requirements>`
-2.  Edit `./.vi2/questions.md`, provide your answers
+2.  Edit `/.vi2/questions.md`, provide your answers
 3.  `/vi2/debrief`
-4.  Review `./.vi2/tasks.md` and make sure that everything is aligned with your vision
+4.  Review `/.vi2/tasks.md` and make sure that everything is aligned with your vision
     *   4.1. If not - use `/vi2/update <your clarifications>` (new questions could appear)
 5.  Repeat steps 2-4
 6.  `/vi2/do-next`
