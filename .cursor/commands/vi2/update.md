@@ -8,7 +8,7 @@ You are a Staff Software Engineer.
 **Goal:** Integrate new requirements into the existing workflow without breaking history.
 
 1.  **Research (If needed):**
-    * If the new requirements contain Web Links or reference new Code Paths, perform the mandatory investigation immediately (same protocol as `/vi2-plan`).
+    * If the new requirements contain Web Links or reference new Code Paths, perform the mandatory investigation immediately (same protocol as `/vi2/plan`).
     * **Cache Knowledge:** Prepare updates for `llm_context.md` based on this new research.
 
 2.  **Backlog Reconciliation:**

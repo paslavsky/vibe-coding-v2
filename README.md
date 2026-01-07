@@ -15,7 +15,8 @@ The **vi2** framework (Vibe Coding V2) manages LLM-driven development through a 
 - [Cursor AI](https://cursor.com/) editor.
 
 ### Installation
-Simply copy the `.cursor/commands/vi2` directory into your project's `.cursor/commands/` folder.
+1. **Project-specific:** Simply copy the `.cursor/commands/vi2` directory into your project's `.cursor/commands/` folder.
+2. **Global (recommended):** Copy the `.cursor/commands/vi2` directory to `${user.home}/.cursor/commands/vi2`. This enables the **vi2** workflow for all your Cursor projects.
 
 ### Command List
 
