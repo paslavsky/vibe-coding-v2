@@ -34,6 +34,34 @@ The **vi2** framework (Vibe Coding V2) manages LLM-driven development through a 
 | `/vi2/validate` | **Check**   | Verify the integrity of internal framework files.           |
 | `/vi2/done`     | **Finish**  | Generate a final report and remove the `./.vi2/` directory. |
 
+### Workflow Diagram
+
+```mermaid
+graph TD
+    subgraph "Planning Phase"
+        A["1. /vi2/plan"] --> B["2. Answer questions.md"]
+        B --> C["3. /vi2/debrief"]
+        C --> D{"4. Review tasks.md"}
+        D -- "Not Aligned (4.1)" --> E["4.1 / 7.1 /vi2/update"]
+        E --> B
+    end
+
+    subgraph "Execution Phase"
+        D -- "Aligned" --> F["6. /vi2/do-next"]
+        F --> G{"7. Review changes"}
+        G -- "Plan Change Needed" --> E
+        G -- "OK" --> H{More Tasks?}
+        H -- "Yes" --> F
+    end
+
+    subgraph "Finalization"
+        H -- "No" --> I["9. /vi2/test"]
+        I --> J["10. /vi2/refactor"]
+        J --> L["11. /vi2/review"]
+        L --> K["12. /vi2/done"]
+    end
+```
+
 ### Sample of Usage
 
 1.  `/vi2/plan @<some_file_with_requirements.md>` (preferred approach) or `/vi2/plan <describe your requirements>`
@@ -44,14 +72,15 @@ The **vi2** framework (Vibe Coding V2) manages LLM-driven development through a 
 5.  Repeat steps 2-4
 6.  `/vi2/do-next`
 7.  Review changes
-    *   7.1. Repeat step 4.1 if you need to make changes to the plan
+    *   7.1. **Mid-process adjustment:** Use `/vi2/update <clarifications>` if you need to change the plan or add requirements at any point.
 8.  Repeat steps 6-7 until the end of the plan
 9.  `/vi2/test`
 10. `/vi2/refactor`
-11. `/vi2/done`
+11. `/vi2/review`
+12. `/vi2/done`
 
 ### Author
-Andrii Paslavskyi (https://github.com/paslavsky)
+[Andrii Paslavskyi](https://github.com/paslavsky)
 
 ### License
 Distributed under the [MIT License](LICENSE).
