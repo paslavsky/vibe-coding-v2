@@ -20,19 +20,20 @@ The **vi2** framework (Vibe Coding V2) manages LLM-driven development through a 
 
 ### Command List
 
-| Command         | Purpose     | When to Use                                                 |
-|:----------------|:------------|:------------------------------------------------------------|
-| `/vi2/plan`     | **Setup**   | Analyze requirements and generate the initial plan.         |
-| `/vi2/do-next`  | **Execute** | Implement the next available task from the checklist.       |
-| `/vi2/status`   | **Monitor** | Check project progress and identify blockers.               |
-| `/vi2/test`     | **Verify**  | Run tests and analyze code coverage.                        |
-| `/vi2/review`   | **Audit**   | Review recently implemented code for quality and bugs.      |
-| `/vi2/refactor` | **Clean**   | Systematically improve code and reduce technical debt.      |
-| `/vi2/update`   | **Adjust**  | Integrate new requirements into the existing plan.          |
-| `/vi2/rollback` | **Revert**  | Restore the codebase to a previous stable state.            |
-| `/vi2/debrief`  | **Process** | Update the plan based on answers to previous questions.     |
-| `/vi2/validate` | **Check**   | Verify the integrity of internal framework files.           |
-| `/vi2/done`     | **Finish**  | Generate a final report and remove the `./.vi2/` directory. |
+| Command         | Purpose     | When to Use                                                              |
+|:----------------|:------------|:-------------------------------------------------------------------------|
+| `/vi2/plan`     | **Setup**   | Analyze requirements and generate the initial plan.                      |
+| `/vi2/do-next`  | **Execute** | Implement the next available task from the checklist.                    |
+| `/vi2/status`   | **Monitor** | Check project progress and identify blockers.                            |
+| `/vi2/test`     | **Verify**  | Run tests and analyze code coverage.                                     |
+| `/vi2/review`   | **Audit**   | Review recently implemented code for quality and bugs.                   |
+| `/vi2/refactor` | **Clean**   | Systematically improve code and reduce technical debt.                   |
+| `/vi2/update`   | **Adjust**  | Integrate new requirements into the existing plan.                       |
+| `/vi2/sync`     | **Sync**    | Align artifacts (`tasks.md`, `llm_context.md`) with manual code changes. |
+| `/vi2/rollback` | **Revert**  | Restore the codebase to a previous stable state.                         |
+| `/vi2/debrief`  | **Process** | Update the plan based on answers to previous questions.                  |
+| `/vi2/validate` | **Check**   | Verify the integrity of internal framework files.                        |
+| `/vi2/done`     | **Finish**  | Generate a final report and remove the `./.vi2/` directory.              |
 
 ### Workflow Diagram
 
@@ -50,6 +51,8 @@ graph TD
         D -- "Aligned" --> F["6. /vi2/do-next"]
         F --> G{"7. Review changes"}
         G -- "Plan Change Needed" --> E
+        G -- "Manual Changes (7.2)" --> M["7.2 /vi2/sync"]
+        M --> D
         G -- "OK" --> H{More Tasks?}
         H -- "Yes" --> F
     end
@@ -62,6 +65,18 @@ graph TD
     end
 ```
 
+### Handling Manual Changes
+If you make manual changes to the codebase, use `/vi2/sync` to keep the framework's artifacts in sync. This command:
+- Analyzes your manual changes and treats them as the **Single Source of Truth**.
+- Marks completed tasks in `tasks.md`.
+- Updates technical decisions in `llm_context.md`.
+- Identifies any new questions or risks arising from your changes.
+
+**Use Cases:**
+- You manually fixed a bug or implemented a small feature.
+- You changed an architectural pattern and want the AI to follow it in future tasks.
+- You partially completed a task and want the AI to pick up the remaining work.
+
 ### Sample of Usage
 
 1.  `/vi2/plan @<some_file_with_requirements.md>` (preferred approach) or `/vi2/plan <describe your requirements>`
@@ -73,6 +88,7 @@ graph TD
 6.  `/vi2/do-next`
 7.  Review changes
     *   7.1. **Mid-process adjustment:** Use `/vi2/update <clarifications>` if you need to change the plan or add requirements at any point.
+    *   7.2. **Manual changes:** If you modified the code yourself, run `/vi2/sync` to update the plan and context.
 8.  Repeat steps 6-7 until the end of the plan
 9.  `/vi2/test`
 10. `/vi2/refactor`
