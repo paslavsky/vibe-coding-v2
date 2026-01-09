@@ -14,7 +14,7 @@ Finalize the project by cleaning up artifacts and confirming completion.
     * Confirm no pending tasks remain
     * Check that execution order is complete
 * **Project State:**
-    * Code is buildable and all tests pass
+    * Code is buildable, all tests pass, and linting/static analysis checks are successful (if configured)
     * No critical issues or blockers
     * All questions in `questions.md` are resolved (if file exists)
 
@@ -27,6 +27,10 @@ Finalize the project by cleaning up artifacts and confirming completion.
     * List of completed features
     * Documentation created
     * Tests written
+* **Contribution Metadata:**
+    * Review the entire project (artifacts and implemented code)
+    * Generate recommendation for `git commit` command
+    * Generate recommendation for Pull Request description in Markdown format
 * **Lessons Learned:**
     * Challenges encountered
     * Solutions applied
@@ -65,7 +69,19 @@ Generate a final completion report, then proceed with cleanup:
 ## Final State
 - Code is buildable: ✓
 - All tests pass: ✓
+- Linting/Static Analysis: ✓ (or N/A)
 - No blockers: ✓
+
+## Contribution Recommendations
+### Git Commit
+```bash
+git commit -m "[Recommended message]"
+```
+
+### Pull Request Description
+```markdown
+[Recommended PR description]
+```
 ```
 
 After generating the report, delete all artifacts in `./.vi2/` directory.
