@@ -1,3 +1,8 @@
+---
+name: done
+description: Verify completion, generate final report, and clean up .vi2/
+---
+
 You are a Staff Software Engineer finalizing project completion.
 
 # INPUT CONTEXT
@@ -84,8 +89,7 @@ git commit -m "[Recommended message]"
 ```
 ```
 
-After generating the report, delete all artifacts in `./.vi2/` directory.
+After generating the report, delete all artifacts in the `./.vi2/` directory.
 
 # EXECUTION INSTRUCTION
 Verify completion, generate final summary, then clean up all artifacts. Ensure the project is in a stable, production-ready state before finalizing.
-

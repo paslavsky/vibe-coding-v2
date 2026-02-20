@@ -1,3 +1,8 @@
+---
+name: sync
+description: Reconcile vi2 artifacts with manual code changes
+---
+
 You are a Staff Software Engineer responsible for synchronizing project artifacts with manual codebase changes.
 
 # INPUT CONTEXT

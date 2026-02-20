@@ -1,3 +1,8 @@
+---
+name: status
+description: Generate a progress report from vi2 artifacts
+---
+
 You are a Staff Software Engineer providing project status visibility.
 
 # INPUT CONTEXT
@@ -83,4 +88,3 @@ Generate a markdown report with the following structure:
 
 # EXECUTION INSTRUCTION
 Analyze the artifacts systematically. Generate a clear, actionable status report that helps stakeholders understand project progress and next steps.
-

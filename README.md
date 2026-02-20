@@ -57,12 +57,17 @@ This subflow minimizes hallucinations and misunderstandings. Instead of the AI s
 
 **Prerequisites:** [Cursor AI](https://cursor.com/) editor.
 
-**Global (recommended)** — enables vi2 for all your Cursor projects:
-```bash
-cp -r .cursor/commands/vi2 ~/.cursor/commands/vi2
+**Marketplace (recommended):**
+```
+/add-plugin vi2
 ```
 
-**Project-specific** — copy the `.cursor/commands/vi2` directory into your project's `.cursor/commands/` folder.
+**Manual — Global** — enables vi2 for all your Cursor projects:
+```bash
+cp -r commands ~/.cursor/commands/vi2
+```
+
+**Manual — Project-specific** — copy the `commands` directory into your project's `.cursor/commands/vi2` folder.
 
 The `.vi2/` working directory is already included in `.gitignore` by default in this repo. If you're adding vi2 to an existing project, add `.vi2/` to your `.gitignore`.
 

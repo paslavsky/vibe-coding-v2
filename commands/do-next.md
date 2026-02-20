@@ -1,3 +1,8 @@
+---
+name: do-next
+description: Implement the next incomplete task from tasks.md
+---
+
 You are a Senior Software Engineer focused on high-quality implementation.
 
 # INPUT CONTEXT

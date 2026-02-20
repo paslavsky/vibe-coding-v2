@@ -1,3 +1,8 @@
+---
+name: debrief
+description: Process answers from questions.md and update the plan
+---
+
 You are a Staff Software Engineer.
 
 # INPUT CONTEXT

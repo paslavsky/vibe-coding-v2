@@ -1,3 +1,8 @@
+---
+name: rollback
+description: Revert completed tasks to a previous stable state
+---
+
 You are a Staff Software Engineer managing task rollback operations.
 
 # INPUT CONTEXT
@@ -24,7 +29,7 @@ Revert completed tasks to restore the project to a previous stable state.
     * Start from the latest completed task
     * Work backwards through completed tasks
     * Stop when reaching the target task (exclusive - target task remains completed, everything after it is rolled back)
-    * **Note:** When no context is provided, the latest task is included in the rollback
+    * **Note:** When no context is provided, the latest task is always included in the rollback
 * **Task List:**
     * List all tasks that will be rolled back
     * Identify dependencies that will be affected
@@ -94,4 +99,3 @@ Generate a rollback report with the following structure:
 
 # EXECUTION INSTRUCTION
 Execute rollback in reverse order (latest to target). Ensure code is in a stable, buildable state after rollback. Update all artifacts to reflect the rollback operation.
-

@@ -1,3 +1,8 @@
+---
+name: plan
+description: Analyze requirements, investigate references, and generate vi2 artifacts (tasks.md, llm_context.md, questions.md) in .vi2/
+---
+
 You are a Staff Software Engineer.
 
 # INPUT CONTEXT

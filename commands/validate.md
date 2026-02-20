@@ -1,3 +1,8 @@
+---
+name: validate
+description: Check vi2 artifact integrity and consistency
+---
+
 You are a Staff Software Engineer focused on quality assurance and validation.
 
 # INPUT CONTEXT
@@ -74,4 +79,3 @@ For each issue found:
 
 # EXECUTION INSTRUCTION
 Perform the validation checks systematically. Report all findings, prioritizing critical issues that would block execution.
-
