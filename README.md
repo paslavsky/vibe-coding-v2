@@ -1,6 +1,8 @@
 # vi2 — Vibe Coding V2
 
-A prompt framework for [Cursor AI](https://cursor.com/) that replaces ad-hoc prompting with a structured, repeatable workflow for building software with LLMs.
+A prompt framework for AI coding assistants that replaces ad-hoc prompting with a structured, repeatable workflow for building software with LLMs.
+
+Supports [Cursor AI](https://cursor.com/) and [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
 
 ## The Problem
 
@@ -15,7 +17,7 @@ Working with AI coding assistants often feels chaotic. You spend more time wrest
 
 ## How vi2 Solves It
 
-vi2 is a set of 12 Cursor commands (slash commands) that enforce a disciplined development workflow. The core idea is simple: **externalize the AI's plan and context into files that both you and the AI can read, review, and edit.**
+vi2 is a set of 12 slash commands that enforce a disciplined development workflow. The core idea is simple: **externalize the AI's plan and context into files that both you and the AI can read, review, and edit.**
 
 When you run `/vi2/plan`, the framework creates a temporary `.vi2/` directory in your project with three artifacts:
 
@@ -55,6 +57,8 @@ This subflow minimizes hallucinations and misunderstandings. Instead of the AI s
 
 ## Installation
 
+### Cursor AI
+
 **Prerequisites:** [Cursor AI](https://cursor.com/) editor.
 
 **Marketplace (recommended):**
@@ -69,9 +73,29 @@ cp -r commands ~/.cursor/commands/vi2
 
 **Manual — Project-specific** — copy the `commands` directory into your project's `.cursor/commands/vi2` folder.
 
+### Claude Code
+
+**Prerequisites:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI.
+
+**From a local clone:**
+```bash
+claude plugin add /path/to/vibe-coding-v2
+```
+
+**From GitHub:**
+```bash
+claude plugin add https://github.com/paslavsky/vibe-coding-v2
+```
+
+vi2 installs as skills only — no rules are injected. You decide when to use vi2 vs. Claude's built-in mechanisms.
+
+### Note
+
 The `.vi2/` working directory is already included in `.gitignore` by default in this repo. If you're adding vi2 to an existing project, add `.vi2/` to your `.gitignore`.
 
 ## Commands
+
+> **Naming convention:** Commands are invoked as `/vi2/command` in Cursor and `/vi2:command` in Claude Code.
 
 ### Planning
 
@@ -110,7 +134,11 @@ The `.vi2/` working directory is already included in `.gitignore` by default in 
 ### Step 1: Plan
 
 ```
+# Cursor
 /vi2/plan @requirements.md
+
+# Claude Code
+/vi2:plan requirements.md
 ```
 
 Or describe your requirements directly in the chat. The AI will research everything, cache the knowledge, produce a task list, and (almost always) generate questions for you.
@@ -190,10 +218,11 @@ graph TD
 
 - **Start fresh sessions freely.** The whole point of the artifacts is that they survive across sessions. Feel free to open a new Agent whenever a conversation gets long. The AI will reload context from `.vi2/`.
 - **Use `/vi2/status` to orient yourself.** After resuming work or switching context, run status to see where things stand.
-- **Provide requirements as files.** `/vi2/plan @requirements.md` works better than pasting long requirements into chat. The AI gets the full content and can reference it precisely.
+- **Provide requirements as files.** In Cursor: `/vi2/plan @requirements.md`. In Claude Code: `/vi2:plan requirements.md`. Both work better than pasting long requirements into chat.
 - **Don't skip the question loop.** The planning phase (plan → debrief → review → repeat) is where you shape the outcome. Rushing to `/vi2/do-next` without reviewing the plan leads to rework.
 - **Manual changes are fine.** The framework doesn't lock you out of your own code. Make changes whenever you want, then run `/vi2/sync` to bring the artifacts up to date.
 - **Use `/vi2/validate` when things feel off.** If the AI seems confused or tasks don't make sense, validate the artifacts to check for inconsistencies.
+- **Claude Code is opt-in.** vi2 installs as skills only in Claude Code — no rules are injected. You choose when to use vi2 vs Claude's built-in planning, and both can coexist freely.
 
 ## Author
 

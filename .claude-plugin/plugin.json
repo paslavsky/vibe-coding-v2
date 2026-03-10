@@ -1,0 +1,15 @@
+{
+  "name": "vi2",
+  "version": "1.0.0",
+  "description": "A structured AI development workflow. Replaces ad-hoc prompting with persistent artifacts, explicit decision points, and stable-state task execution.",
+  "author": {
+    "name": "Andrii Paslavskyi",
+    "email": "a.paslavsky@gmail.com",
+    "url": "https://github.com/paslavsky"
+  },
+  "homepage": "https://github.com/paslavsky/vibe-coding-v2",
+  "repository": "https://github.com/paslavsky/vibe-coding-v2",
+  "license": "MIT",
+  "keywords": ["vi2", "vibe-coding", "workflow", "planning", "task-management"],
+  "skills": "./skills/"
+}

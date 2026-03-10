@@ -118,6 +118,7 @@ async function validateFrontmatterFile(filePath, componentName, requiredKeys, pl
       addError(`${pluginName}: ${componentName} file missing "${key}" in frontmatter: ${relativeFile}`);
     }
   }
+  return parsed;
 }
 
 async function validateComponentFrontmatter(pluginDir, pluginName) {
@@ -144,32 +145,36 @@ async function validateComponentFrontmatter(pluginDir, pluginName) {
   }
 }
 
-async function main() {
+// ---------------------------------------------------------------------------
+// Cursor Plugin Validation
+// ---------------------------------------------------------------------------
+
+async function validateCursorPlugin() {
+  console.log("--- Cursor Plugin Validation ---");
   const manifestPath = path.join(repoRoot, ".cursor-plugin", "plugin.json");
   let pluginManifest;
   try {
     const raw = await fs.readFile(manifestPath, "utf8");
     pluginManifest = JSON.parse(raw);
-  } catch (err) {
-    addError(`Plugin manifest missing or invalid: ${manifestPath}`);
-    summarizeAndExit();
-    return;
+  } catch {
+    addError(`Cursor manifest missing or invalid: ${manifestPath}`);
+    return null;
   }
 
   const pluginName = pluginManifest.name || "plugin";
 
   if (typeof pluginManifest.name !== "string" || !pluginNamePattern.test(pluginManifest.name)) {
     addError(
-      `"name" in plugin.json must be lowercase kebab-case and start/end with an alphanumeric character.`
+      `"name" in .cursor-plugin/plugin.json must be lowercase kebab-case and start/end with an alphanumeric character.`
     );
   }
 
   if (!pluginManifest.displayName || typeof pluginManifest.displayName !== "string") {
-    addError('"displayName" is required in plugin.json.');
+    addError('"displayName" is required in .cursor-plugin/plugin.json.');
   }
 
   if (!pluginManifest.description || typeof pluginManifest.description !== "string") {
-    addError('"description" is required in plugin.json.');
+    addError('"description" is required in .cursor-plugin/plugin.json.');
   }
 
   const manifestFields = ["logo", "commands", "rules"];
@@ -182,27 +187,152 @@ async function main() {
 
   await validateComponentFrontmatter(pluginDir, pluginName);
 
+  return pluginManifest;
+}
+
+// ---------------------------------------------------------------------------
+// Claude Code Plugin Validation
+// ---------------------------------------------------------------------------
+
+async function validateClaudePlugin() {
+  console.log("--- Claude Code Plugin Validation ---");
+  const manifestPath = path.join(repoRoot, ".claude-plugin", "plugin.json");
+  let pluginManifest;
+  try {
+    const raw = await fs.readFile(manifestPath, "utf8");
+    pluginManifest = JSON.parse(raw);
+  } catch {
+    addError(`Claude Code manifest missing or invalid: ${manifestPath}`);
+    return null;
+  }
+
+  const pluginName = pluginManifest.name || "plugin";
+
+  if (typeof pluginManifest.name !== "string" || !pluginNamePattern.test(pluginManifest.name)) {
+    addError(
+      `"name" in .claude-plugin/plugin.json must be lowercase kebab-case and start/end with an alphanumeric character.`
+    );
+  }
+
+  if (!pluginManifest.description || typeof pluginManifest.description !== "string") {
+    addError('"description" is required in .claude-plugin/plugin.json.');
+  }
+
+  // Validate skills directory
+  const skillsRef = pluginManifest.skills;
+  if (skillsRef && typeof skillsRef === "string") {
+    await validateReferencedPath("skills", skillsRef, pluginName);
+  }
+
+  // Validate each skill: skills/<name>/SKILL.md
+  const skillsDir = path.join(pluginDir, "skills");
+  if (await pathExists(skillsDir)) {
+    const entries = await fs.readdir(skillsDir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+      const skillFile = path.join(skillsDir, entry.name, "SKILL.md");
+      if (!(await pathExists(skillFile))) {
+        addError(`${pluginName}: skill directory "${entry.name}" is missing SKILL.md`);
+        continue;
+      }
+      const parsed = await validateFrontmatterFile(
+        skillFile,
+        "skill",
+        ["name", "description"],
+        pluginName
+      );
+      // Verify skill name matches directory name
+      if (parsed && parsed.name && parsed.name !== entry.name) {
+        addWarning(
+          `${pluginName}: skill name "${parsed.name}" in SKILL.md does not match directory name "${entry.name}"`
+        );
+      }
+    }
+  } else if (skillsRef) {
+    addError(`${pluginName}: skills directory referenced but not found at "${skillsRef}"`);
+  }
+
+  return pluginManifest;
+}
+
+// ---------------------------------------------------------------------------
+// Cross-Platform Consistency Validation
+// ---------------------------------------------------------------------------
+
+async function validateCrossConsistency(cursorManifest, claudeManifest) {
+  if (!cursorManifest || !claudeManifest) {
+    return;
+  }
+
+  console.log("--- Cross-Platform Consistency ---");
+
+  // Plugin names must match
+  if (cursorManifest.name !== claudeManifest.name) {
+    addError(
+      `Plugin name mismatch: Cursor="${cursorManifest.name}" vs Claude Code="${claudeManifest.name}"`
+    );
+  }
+
+  // Every command should have a corresponding skill
+  const commandsDir = path.join(pluginDir, "commands");
+  const skillsDir = path.join(pluginDir, "skills");
+
+  if ((await pathExists(commandsDir)) && (await pathExists(skillsDir))) {
+    const commandFiles = await fs.readdir(commandsDir);
+    const skillDirs = await fs.readdir(skillsDir);
+
+    for (const cmdFile of commandFiles) {
+      const ext = path.extname(cmdFile).toLowerCase();
+      if (ext !== ".md" && ext !== ".mdc" && ext !== ".markdown") {
+        continue;
+      }
+      const cmdName = path.basename(cmdFile, ext);
+      if (!skillDirs.includes(cmdName)) {
+        addWarning(
+          `Command "${cmdName}" has no corresponding skill directory in skills/`
+        );
+      } else {
+        const skillFile = path.join(skillsDir, cmdName, "SKILL.md");
+        if (!(await pathExists(skillFile))) {
+          addWarning(
+            `Command "${cmdName}" has a skill directory but no SKILL.md file`
+          );
+        }
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+
+async function main() {
+  const cursorManifest = await validateCursorPlugin();
+  const claudeManifest = await validateClaudePlugin();
+  await validateCrossConsistency(cursorManifest, claudeManifest);
   summarizeAndExit();
 }
 
 function summarizeAndExit() {
   if (warnings.length > 0) {
-    console.log("Warnings:");
+    console.log("\nWarnings:");
     for (const warning of warnings) {
-      console.log(`- ${warning}`);
+      console.log(`  ⚠ ${warning}`);
     }
-    console.log("");
   }
 
   if (errors.length > 0) {
-    console.error("Validation failed:");
+    console.error("\nValidation failed:");
     for (const error of errors) {
-      console.error(`- ${error}`);
+      console.error(`  ✗ ${error}`);
     }
     process.exit(1);
   }
 
-  console.log("Validation passed.");
+  console.log("\n✓ Validation passed for all platforms.");
 }
 
 await main();

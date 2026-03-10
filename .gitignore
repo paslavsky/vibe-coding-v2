@@ -74,3 +74,4 @@ Temporary Items
 /.idea
 /.vi2/
 node_modules/
+/.claude/settings.local.json
